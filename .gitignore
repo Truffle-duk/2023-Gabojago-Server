@@ -1,0 +1,8 @@
+node_modules/
+
+migrations/
+public/
+seeders/
+views/
+
+.env
