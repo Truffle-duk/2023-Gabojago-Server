@@ -12,6 +12,7 @@ dotenv.config();
 const db = require('./models');
 const mainRouter = require('./routes/main');
 const authRouter = require('./routes/auth');
+const insertRouter = require('./routes/insert')
 const passportConfig = require('./passport');
 
 const app = express();
@@ -52,6 +53,7 @@ app.use(passport.session());
 
 app.use('/', mainRouter);
 app.use('/auth', authRouter);
+app.use('/input', insertRouter);
 
 //에러처리 미들웨어 연결
 

@@ -5,21 +5,20 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 router.use((req, res, next) => {
-    res.locals.user = null;
-    next();
-});
-
-router.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
 
-router.get('/', isNotLoggedIn, async(req, res, next) => {
+router.get('/', isLoggedIn, async(req, res, next) => {
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth();
+
     try {
         await AccountList.findAll({
-            include: {
-                model: User,
-                attributes: ['user_id', 'nickname']
+            where: {
+                date: {[Op.and]: {[Op.contains]: year, [Op.contains]: month}},
+                fk_userId1: req.user.id
             },
             order: [['date', 'DESC']]
         });
@@ -30,15 +29,15 @@ router.get('/', isNotLoggedIn, async(req, res, next) => {
     }
 });
 
-router.get('/insert', isLoggedIn, (req, res) => {
-    res.render('insert', { title: '가계부 입력하기 - Gabojago' }); //title 부분이 무슨 역할인지 잘 모르겠음
+router.get('/input', isLoggedIn, (req, res) => {
+    res.render('input', { title: '가계부 입력하기 - Gabojago' }); //title 부분이 무슨 역할인지 잘 모르겠음
 })
 
-router.get('/month_stats', isLoggedIn, (req, res) => {
+router.get('/this_month', isLoggedIn, (req, res) => {
     res.render('month_stats', { title: '이번 달 통계 - Gabojago' });
 })
 
-router.get('/compare_stats', isLoggedIn, (req, res) => {
+router.get('/compare', isLoggedIn, (req, res) => {
     res.render('compare_stats', { title: '비교 통계 - Gabojago' });
 })
 

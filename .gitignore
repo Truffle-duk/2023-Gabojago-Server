@@ -3,6 +3,6 @@ node_modules/
 migrations/
 public/
 seeders/
-views/
+views/ 
 
 .env
